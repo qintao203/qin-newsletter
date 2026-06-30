@@ -1,0 +1,23 @@
+name: 秦系统 · 小时级交易信号推送
+
+on:
+  schedule:
+    # 每小时运行 (UTC时间, 北京时间+8)
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  generate-signals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 生成交易信号并推送飞书
+        env:
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          python hourly_signal.py
