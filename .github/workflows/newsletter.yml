@@ -22,4 +22,4 @@ jobs:
         env:
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
         run: |
-          python tools/newsletter_standalone.py
+          python newsletter_standalone.py
