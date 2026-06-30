@@ -1,0 +1,25 @@
+name: 秦系统 · 量化消息面日报
+
+on:
+  schedule:
+    # 北京时间每天 08:00, 12:00, 18:00, 22:00 (UTC 00:00, 04:00, 10:00, 14:00)
+    - cron: '0 0,4,10,14 * * *'
+  workflow_dispatch:  # 手动触发
+
+jobs:
+  generate-newsletter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 生成消息面报告并推送飞书
+        env:
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+        run: |
+          python tools/newsletter_standalone.py
